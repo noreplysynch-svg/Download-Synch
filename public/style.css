@@ -130,21 +130,59 @@ body{
   pointer-events:none;
 }
 
-/* ---------- PIN row ---------- */
-.pin-row{
-  display:flex;gap:10px;margin-bottom:18px;
+/* ---------- PIN modal ---------- */
+.pin-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,0.55);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;z-index:50;
+  animation:fadeUp .2s ease;
 }
-.pin-row input{
-  flex:1;border:1px solid var(--border);background:var(--surface);
+.pin-modal-card{
+  width:100%;max-width:340px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);box-shadow:var(--shadow);
+  padding:26px 22px;text-align:center;
+}
+.pin-modal-icon{
+  width:48px;height:48px;margin:0 auto 14px;border-radius:var(--radius-full);
+  background:var(--accent-dim);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+}
+.pin-modal-card h2{margin:0 0 6px;font-family:var(--font-display);font-size:19px;font-weight:800;}
+.pin-modal-card p{margin:0 0 16px;font-size:13.5px;color:var(--text-dim);}
+.pin-modal-card input{
+  width:100%;border:1px solid var(--border);background:var(--surface-2);
   color:var(--text);border-radius:var(--radius-md);padding:12px 14px;
-  font-family:var(--font-body);font-size:14px;
+  font-family:var(--font-body);font-size:16px;text-align:center;letter-spacing:0.15em;
 }
-.pin-row input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.pin-modal-card input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.pin-error{
+  color:#FF5C5C !important;font-size:12.5px;margin:8px 0 0 !important;
+}
+.pin-modal-actions{display:flex;gap:10px;margin-top:16px;}
+.pin-cancel-btn{
+  flex:1;border:1px solid var(--border);background:transparent;color:var(--text);
+  font-weight:600;font-size:13.5px;padding:11px;border-radius:var(--radius-md);cursor:pointer;
+}
+.pin-cancel-btn:hover{background:var(--surface-2);}
+.pin-modal-actions .pin-btn{flex:1;padding:11px;}
+
 .pin-btn{
   border:none;background:var(--accent);color:#fff;font-weight:600;
   font-size:13.5px;padding:0 18px;border-radius:var(--radius-md);cursor:pointer;
 }
 .pin-btn:hover{filter:brightness(1.08);}
+
+/* ---------- Progress bar ---------- */
+.progress-track{
+  display:none;height:6px;border-radius:var(--radius-full);
+  background:var(--surface-2);margin-top:12px;overflow:hidden;
+}
+.progress-track.is-visible{display:block;}
+.progress-fill{
+  height:100%;width:0%;background:var(--accent);border-radius:var(--radius-full);
+  transition:width .15s ease;
+}
 
 /* ---------- Upload cards (admin) ---------- */
 .upload-grid{display:flex;flex-direction:column;gap:12px;}
