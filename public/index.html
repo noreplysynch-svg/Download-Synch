@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Synch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-name">Synch</span>
+    </div>
+    <button class="icon-btn" id="themeToggle" aria-label="Change theme" title="Change theme">
+      <svg id="themeIcon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </button>
+  </header>
+
+  <!-- HOME SCREEN -->
+  <main id="homeScreen" class="screen is-active">
+    <div class="screen-head">
+      <p class="eyebrow">Download</p>
+      <h1>Synch apps</h1>
+      <p class="sub">Grab the latest build of each app.</p>
+    </div>
+
+    <div class="app-grid">
+
+      <article class="app-card" data-app-id="downloader">
+        <div class="app-icon" style="--tint:#0084FF;">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 19h14"/>
+          </svg>
+        </div>
+        <div class="app-copy">
+          <h2>Synch Video Downloader</h2>
+          <p class="app-meta">Checking…</p>
+        </div>
+        <a class="open-btn is-disabled" data-app="downloader">Download</a>
+      </article>
+
+      <article class="app-card" data-app-id="vpn">
+        <div class="app-icon" style="--tint:#2FD37A;">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/>
+          </svg>
+        </div>
+        <div class="app-copy">
+          <h2>Synch VPN</h2>
+          <p class="app-meta">Checking…</p>
+        </div>
+        <a class="open-btn is-disabled" data-app="vpn">Download</a>
+      </article>
+
+      <article class="app-card" data-app-id="message">
+        <div class="app-icon" style="--tint:#FF9500;">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5h16v11H8l-4 4V5z"/>
+          </svg>
+        </div>
+        <div class="app-copy">
+          <h2>Synch Message</h2>
+          <p class="app-meta">Checking…</p>
+        </div>
+        <a class="open-btn is-disabled" data-app="message">Download</a>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- UPLOAD SCREEN (admin only) -->
+  <main id="uploadScreen" class="screen">
+    <div class="screen-head">
+      <p class="eyebrow">Admin</p>
+      <h1>Upload</h1>
+      <p class="sub">Push a new APK for each app. Requires your owner PIN.</p>
+    </div>
+
+    <div class="pin-row">
+      <input type="password" id="pinInput" placeholder="Owner PIN" inputmode="numeric" autocomplete="off" />
+      <button class="pin-btn" id="pinSaveBtn">Unlock</button>
+    </div>
+
+    <div class="upload-grid" id="uploadGrid">
+
+      <div class="upload-card" data-app-id="downloader">
+        <label class="upload-dropzone" for="file-downloader">
+          <input type="file" id="file-downloader" accept=".apk" hidden />
+          <div class="upload-card-top">
+            <div class="app-icon app-icon-sm" style="--tint:#0084FF;">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 19h14"/>
+              </svg>
+            </div>
+            <div class="upload-card-copy">
+              <h3>Synch Video Downloader</h3>
+              <p class="upload-status">Checking…</p>
+            </div>
+          </div>
+          <p class="upload-cta">Drop APK or <span class="link-text">browse</span></p>
+        </label>
+        <button class="remove-btn upload-remove" hidden aria-label="Remove file">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="upload-card" data-app-id="vpn">
+        <label class="upload-dropzone" for="file-vpn">
+          <input type="file" id="file-vpn" accept=".apk" hidden />
+          <div class="upload-card-top">
+            <div class="app-icon app-icon-sm" style="--tint:#2FD37A;">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/>
+              </svg>
+            </div>
+            <div class="upload-card-copy">
+              <h3>Synch VPN</h3>
+              <p class="upload-status">Checking…</p>
+            </div>
+          </div>
+          <p class="upload-cta">Drop APK or <span class="link-text">browse</span></p>
+        </label>
+        <button class="remove-btn upload-remove" hidden aria-label="Remove file">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="upload-card" data-app-id="message">
+        <label class="upload-dropzone" for="file-message">
+          <input type="file" id="file-message" accept=".apk" hidden />
+          <div class="upload-card-top">
+            <div class="app-icon app-icon-sm" style="--tint:#FF9500;">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 5h16v11H8l-4 4V5z"/>
+              </svg>
+            </div>
+            <div class="upload-card-copy">
+              <h3>Synch Message</h3>
+              <p class="upload-status">Checking…</p>
+            </div>
+          </div>
+          <p class="upload-cta">Drop APK or <span class="link-text">browse</span></p>
+        </label>
+        <button class="remove-btn upload-remove" hidden aria-label="Remove file">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <nav class="dock" aria-label="Primary">
+    <button class="dock-btn is-active" data-target="homeScreen" aria-label="Home">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h12v-9"/>
+      </svg>
+    </button>
+    <button class="dock-btn" data-target="uploadScreen" aria-label="Upload">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M5 20h14"/>
+      </svg>
+    </button>
+  </nav>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "synch-downloads",
+  "version": "1.0.0",
+  "description": "Download site for the Synch app ecosystem",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^2.0.0"
+  }
+}
