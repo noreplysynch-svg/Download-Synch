@@ -80,12 +80,7 @@
     <div class="screen-head">
       <p class="eyebrow">Admin</p>
       <h1>Upload</h1>
-      <p class="sub">Push a new APK for each app. Requires your owner PIN.</p>
-    </div>
-
-    <div class="pin-row">
-      <input type="password" id="pinInput" placeholder="Owner PIN" inputmode="numeric" autocomplete="off" />
-      <button class="pin-btn" id="pinSaveBtn">Unlock</button>
+      <p class="sub">Push a new APK for each app.</p>
     </div>
 
     <div class="upload-grid" id="uploadGrid">
@@ -105,6 +100,7 @@
             </div>
           </div>
           <p class="upload-cta">Drop APK or <span class="link-text">browse</span></p>
+          <div class="progress-track"><div class="progress-fill"></div></div>
         </label>
         <button class="remove-btn upload-remove" hidden aria-label="Remove file">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -128,6 +124,7 @@
             </div>
           </div>
           <p class="upload-cta">Drop APK or <span class="link-text">browse</span></p>
+          <div class="progress-track"><div class="progress-fill"></div></div>
         </label>
         <button class="remove-btn upload-remove" hidden aria-label="Remove file">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -151,6 +148,7 @@
             </div>
           </div>
           <p class="upload-cta">Drop APK or <span class="link-text">browse</span></p>
+          <div class="progress-track"><div class="progress-fill"></div></div>
         </label>
         <button class="remove-btn upload-remove" hidden aria-label="Remove file">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -175,6 +173,25 @@
     </button>
   </nav>
 
+</div>
+
+<!-- PIN GATE MODAL -->
+<div class="pin-modal" id="pinModal" hidden>
+  <div class="pin-modal-card">
+    <div class="pin-modal-icon">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+      </svg>
+    </div>
+    <h2>Admin access</h2>
+    <p>Enter your owner PIN to manage uploads.</p>
+    <input type="password" id="pinModalInput" placeholder="PIN" inputmode="numeric" autocomplete="off" />
+    <p class="pin-error" id="pinError" hidden>Incorrect PIN. Try again.</p>
+    <div class="pin-modal-actions">
+      <button class="pin-cancel-btn" id="pinCancelBtn">Cancel</button>
+      <button class="pin-btn" id="pinSubmitBtn">Unlock</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
