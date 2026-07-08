@@ -43,13 +43,22 @@ function requirePin(req, res, next) {
 // ---------- Multer: temp storage, we rename after validating appId ----------
 const upload = multer({
   dest: UPLOAD_DIR,
-  limits: { fileSize: 500 * 1024 * 1024 }, // 500MB ceiling, adjust as needed
+  limits: { fileSize: 1024 * 1024 * 1024 }, // 1GB ceiling, adjust as needed
   fileFilter: (req, file, cb) => {
     if (!file.originalname.toLowerCase().endsWith(".apk")) {
       return cb(new Error("Only .apk files are allowed"));
     }
     cb(null, true);
   }
+});
+
+// ---------- Public: verify PIN (used to gate the upload screen) ----------
+app.post("/api/verify-pin", express.json(), (req, res) => {
+  const pin = req.header("x-owner-pin");
+  if (!pin || pin !== OWNER_PIN) {
+    return res.status(401).json({ error: "Incorrect PIN" });
+  }
+  res.json({ ok: true });
 });
 
 // ---------- Public: list current apps (metadata only) ----------
@@ -117,4 +126,8 @@ app.use((err, req, res, next) => {
   res.status(400).json({ error: err.message || "Upload failed" });
 });
 
-app.listen(PORT, () => console.log(`Synch downloads server running on port ${PORT}`));
+// Node kills requests at 5 minutes by default — too short for a 200MB+ upload
+// on a slow connection. Raise it toward Railway's 15-minute platform ceiling.
+const server = app.listen(PORT, () => console.log(`Synch downloads server running on port ${PORT}`));
+server.requestTimeout = 14 * 60 * 1000; // 14 min, just under Railway's 15 min platform max
+server.headersTimeout = 14 * 60 * 1000 + 5000; // must be >= requestTimeout
