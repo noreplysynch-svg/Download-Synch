@@ -137,6 +137,7 @@ body{
   padding:20px;z-index:50;
   animation:fadeUp .2s ease;
 }
+.pin-modal[hidden]{display:none;}
 .pin-modal-card{
   width:100%;max-width:340px;
   background:var(--surface);border:1px solid var(--border);
