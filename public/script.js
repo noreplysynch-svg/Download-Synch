@@ -47,21 +47,75 @@
     screens.forEach((s) => s.classList.toggle("is-active", s.id === id));
     dockButtons.forEach((b) => b.classList.toggle("is-active", b.dataset.target === id));
   }
-  dockButtons.forEach((btn) => btn.addEventListener("click", () => showScreen(btn.dataset.target)));
 
-  /* ---------- PIN (admin session only, never sent anywhere but this server) ---------- */
-  const pinInput = document.getElementById("pinInput");
-  const pinSaveBtn = document.getElementById("pinSaveBtn");
-  pinInput.value = sessionStorage.getItem("synch-owner-pin") || "";
-
-  pinSaveBtn.addEventListener("click", () => {
-    sessionStorage.setItem("synch-owner-pin", pinInput.value.trim());
-    showToast("PIN set for this session");
-  });
+  /* ---------- PIN gate (admin session only) ---------- */
+  const pinModal = document.getElementById("pinModal");
+  const pinModalInput = document.getElementById("pinModalInput");
+  const pinError = document.getElementById("pinError");
+  const pinCancelBtn = document.getElementById("pinCancelBtn");
+  const pinSubmitBtn = document.getElementById("pinSubmitBtn");
 
   function getPin() {
-    return sessionStorage.getItem("synch-owner-pin") || pinInput.value.trim();
+    return sessionStorage.getItem("synch-owner-pin") || "";
   }
+
+  function openPinModal() {
+    pinError.hidden = true;
+    pinModalInput.value = "";
+    pinModal.hidden = false;
+    pinModalInput.focus();
+  }
+  function closePinModal() {
+    pinModal.hidden = true;
+  }
+
+  async function submitPin() {
+    const pin = pinModalInput.value.trim();
+    if (!pin) return;
+    pinSubmitBtn.disabled = true;
+    try {
+      const res = await fetch("/api/verify-pin", {
+        method: "POST",
+        headers: { "x-owner-pin": pin }
+      });
+      if (!res.ok) {
+        pinError.hidden = false;
+        pinModalInput.value = "";
+        pinModalInput.focus();
+        return;
+      }
+      // Correct PIN: remember for this browser tab session only, unlock the tab.
+      sessionStorage.setItem("synch-owner-pin", pin);
+      closePinModal();
+      showScreen("uploadScreen");
+      refreshUI();
+    } catch {
+      showToast("Couldn't reach the server");
+    } finally {
+      pinSubmitBtn.disabled = false;
+    }
+  }
+
+  pinSubmitBtn.addEventListener("click", submitPin);
+  pinModalInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") submitPin();
+  });
+  pinCancelBtn.addEventListener("click", () => {
+    closePinModal();
+    // Cancelling shouldn't strand the user on a screen they can't see; go home.
+    showScreen("homeScreen");
+  });
+
+  dockButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.target;
+      if (target === "uploadScreen" && !getPin()) {
+        openPinModal();
+        return;
+      }
+      showScreen(target);
+    });
+  });
 
   /* ---------- Helpers ---------- */
   function formatSize(bytes) {
@@ -140,12 +194,20 @@
         body: formData
       });
       const body = await res.json();
-      if (!res.ok) throw new Error(body.error || "Upload failed");
+      if (!res.ok) {
+        if (res.status === 401) handlePinRejected();
+        throw new Error(body.error || "Upload failed");
+      }
       showToast(`${APP_NAMES[appId]} updated`);
       refreshUI();
     } catch (err) {
       showToast(err.message);
     }
+  }
+
+  function handlePinRejected() {
+    sessionStorage.removeItem("synch-owner-pin");
+    showScreen("homeScreen");
   }
 
   async function removeFile(appId) {
@@ -160,7 +222,10 @@
         headers: { "x-owner-pin": pin }
       });
       const body = await res.json();
-      if (!res.ok) throw new Error(body.error || "Remove failed");
+      if (!res.ok) {
+        if (res.status === 401) handlePinRejected();
+        throw new Error(body.error || "Remove failed");
+      }
       showToast(`${APP_NAMES[appId]} removed`);
       refreshUI();
     } catch (err) {
